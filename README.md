@@ -13,8 +13,6 @@ PUT: Will not have any functionality at this endpoint
 
 POST: Create a new event
 
-***
-
 ## /events/:eventId
 GET: Will retrieve a specific event from database
 
@@ -32,7 +30,6 @@ DELETE: Will clear all users
 PUT: Will not have any functionality at this endpoint
 
 POST: Create a new user
-***
 
 ## users/userId
 GET: Retrieve information for a specific user
