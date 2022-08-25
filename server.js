@@ -1,11 +1,12 @@
 const express = require('express');
 const morgan = require('morgan');
-const campsiteRouter = require('./routes/campsiteRouter');
+const eventRouter = requrie ('./routes/eventsRouter');
+const userRouter = require('./routes/usersRouter');
 
 const hostname = 'localhost';
 const port = 3000;
 
-// Anywhere after thsi line, "app" means "using express"
+// Anywhere after this line, "app" means "using express"
 const app = express();
 
 
@@ -14,10 +15,8 @@ app.use(morgan('dev'));
 // Sets up json middleware for dealing with JSON data
 app.use(express.json());
 
-
-app.use('/campsites', campsiteRouter)
-
-
+app.use('/events', eventRouter);
+app.use('/users', userRouter)
 
 // app.get('/campsites/:campsiteId', (req, res) => {
 //     res.end(`Will send details fo the campsite: ${req.params.campsiteId} to you`)  // This is how you access fluid variables from the URL. req.params.thing-after-colon
