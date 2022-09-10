@@ -1,10 +1,27 @@
 const express = require('express');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
+
 const eventRouter = require('./routes/eventsRouter');
 const userRouter = require('./routes/usersRouter');
+const config = require('./config');
 
 const hostname = 'localhost';
 const port = 3000;
+
+
+const url = config.mongoUrl;
+const connect = mongoose.connect(url, {
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
+
+connect.then(
+    () => console.log('Connected correctly to the server'), 
+    err => console.log(err)) // Second argument gives function to run if there's an error. Useful if there is no further chain
+
 
 // Anywhere after this line, "app" means "using express"
 const app = express();
