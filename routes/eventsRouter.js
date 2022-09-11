@@ -15,11 +15,19 @@ eventRouter.route('/')
     })
     .catch(err => next(err))
 })
-.post(authenticate.verifyUser, (req, res) => {
-    const name = req.body.name; // This is how we get information out of the request. req.body.whatever-will-be-submitted
-    const description = req.body.description;
-    const date = req.body.date;
-    res.end(`Will update the events with the following:\nEvent name: ${name}\nEvent description: ${description}\nEvent date: ${Date(date)}`)
+.post(
+    // authenticate.verifyUser, 
+    // authenticate.verifyAdmin,
+    (req, res, next) => {
+        const {name, description, eventDate} = req.body;
+        if (name && description && eventDate){
+            // res.write(`The author's id is ${req.user._id}`);
+            res.end(`Will add the following event:\nEvent name: ${name}\nEvent description: ${description}\nEvent date: ${Date(eventDate)}`)
+        } else {
+            const err = new Error('Every event MUST include a name, description, and eventDate');
+            err.statusCode = 400;
+            return next(err)
+        }
 })
 .put((req, res) => {
     res.statusCode = 403;
