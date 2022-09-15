@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const passport = require('passport');
 
 const eventRouter = require('./routes/eventsRouter');
 const userRouter = require('./routes/usersRouter');
@@ -9,7 +10,7 @@ const config = require('./config');
 const hostname = 'localhost';
 const port = 3000;
 
-
+// Configure and connect to Mongoose
 const url = config.mongoUrl;
 const connect = mongoose.connect(url, {
     useCreateIndex: true,
@@ -19,13 +20,12 @@ const connect = mongoose.connect(url, {
 });
 
 connect.then(
-    () => console.log('Connected correctly to the server'), 
-    err => console.log(err)) // Second argument gives function to run if there's an error. Useful if there is no further chain
+    () => console.log('Connected correctly to the database server'), // If it works
+    err => console.log(err)) // If it doesn't work
 
 
 // Anywhere after this line, "app" means "using express"
 const app = express();
-
 
 // Set up Morgan middleware logging in dev mode
 app.use(morgan('dev'));
@@ -33,6 +33,10 @@ app.use(morgan('dev'));
 // Set up json middleware for dealing with JSON data
 app.use(express.json());
 
+// Set up 
+app.use(passport.initialize());
+
+// Route references
 app.use('/events', eventRouter);
 app.use('/users', userRouter)
 
