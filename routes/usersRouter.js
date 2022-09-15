@@ -7,7 +7,7 @@ const User = require('../models/User');
 
 
 userRouter.route('/')
-.get((req, res, next) => {
+.get(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     User.find()
     .then(users => {
         if (!users) {
@@ -25,11 +25,10 @@ userRouter.route('/')
         req.body.password,
         (err, user) => {
             if (err) {
-                console.log('mark3');
                 res.statusCode = 500;
                 res.setHeader('Content-Type', 'application/json');
                 res.json({err: err});
-                console.log('There was an error registering new user');
+                console.log('There was an error registering a new user');
                 return next(err)
             } else {
                 if (req.body.firstName) {
@@ -46,7 +45,7 @@ userRouter.route('/')
                         return next(err)
                     };
                     passport.authenticate('local')(req, res, () => {
-                        res.statusCode = 200;
+                        res.statusCode = 201;
                         res.setHeader('Content-Type', 'application/json');
                         res.json({success: true, status: 'Registration successful'});
                     })
@@ -59,10 +58,19 @@ userRouter.route('/')
     res.statusCode = 403;
     res.end('PUT operation not supported on /users')
 })
-.delete((req, res, next) => {
+.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     res.statusCode = 200;
     res.end('Deleting all users');
 });
+
+// Route to log in
+userRouter.get('/login', passport.authenticate('local'), (req, res, next) => {
+    const token = authenticate.getToken({_id: req.user._id});
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.json({success: true, token: token, status: 'You are successfully logged in!'})
+})
+
 
 // Routes for dealing with single user
 userRouter.route('/:userId')
@@ -70,12 +78,17 @@ userRouter.route('/:userId')
     authenticate.verifyUser,
     authenticate.verifyAdmin,
     (req, res, next) => {
-    res.statusCode = 200;
-    res.end('Will send a single user to you');
+    User.findById(req.params.userId)
+    .then(user => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(user);
+    })
+    .catch(err => next(err))
 })
 .post((req, res, next) => {
     res.statusCode = 403;
-    res.end('POST operation not supported on /users/' + req.params.userId)
+    res.end(`POST operation not supported on /users/${req.params.userId}\nUsers must be adding by sending a POST request to /users`)
 })
 .put(
     authenticate.verifyUser,
@@ -89,7 +102,7 @@ userRouter.route('/:userId')
         new: true
     })
     .then(user => {
-        res.statusCode = 200;
+        res.statusCode = 201;
         res.setHeader('Content-Type', 'application/json');
         res.json(user);
     })
@@ -99,8 +112,12 @@ userRouter.route('/:userId')
     authenticate.verifyUser,
     authenticate.verifyAdmin,
     (req, res, next) => {
-    res.statusCode = 200;
-    res.end('Delete a single user with id: ' + req.params.userId);
+    User.findByIdAndDelete(req.params.userId)
+    .then(response => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(response);
+    })
 });
 
 module.exports = userRouter;
