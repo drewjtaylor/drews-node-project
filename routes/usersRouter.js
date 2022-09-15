@@ -71,6 +71,16 @@ userRouter.get('/login', passport.authenticate('local'), (req, res, next) => {
     res.json({success: true, token: token, status: 'You are successfully logged in!'})
 })
 
+// Route searches for user by username
+userRouter.get('/:username', authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    User.findOne({username: req.params.username})
+    .then(user => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(user);
+    })
+    .catch(err => next(err))
+})
 
 // Routes for dealing with single user
 userRouter.route('/:userId')
