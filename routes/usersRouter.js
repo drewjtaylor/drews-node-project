@@ -72,7 +72,7 @@ userRouter.get('/login', passport.authenticate('local'), (req, res, next) => {
 })
 
 // Route searches for user by username
-userRouter.get('/:username', authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+userRouter.get('/finduser/:username', authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     User.findOne({username: req.params.username})
     .then(user => {
         res.statusCode = 200;
@@ -90,6 +90,7 @@ userRouter.route('/:userId')
     (req, res, next) => {
     User.findById(req.params.userId)
     .then(user => {
+        console.log('user found');
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json(user);
