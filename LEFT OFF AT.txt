@@ -1,0 +1,1 @@
+Make it so an event owner can send a PUT request to edit the information
