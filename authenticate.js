@@ -21,7 +21,7 @@ exports.verifyAdmin = (req, res, next) => {
     if (req.user.admin) {
         return next()
     } else {
-        err = new Error('You are not authorized for this operation!');
+        err = new Error('You are not an admin, so you are not authorized for this operation!');
         err.statusCode = 403;
         return next(err)
     }
