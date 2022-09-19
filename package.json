@@ -1,8 +1,8 @@
 {
     "name": "node-express",
     "version": "1.0.0",
-    "description": "Node Express Examples",
-    "main": "server.js",
+    "description": "A server for handling requests to MongoDB for events/users",
+    "main": "./bin/www",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "nodemon ./bin/www"
