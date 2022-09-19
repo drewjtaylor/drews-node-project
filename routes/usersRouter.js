@@ -64,7 +64,7 @@ userRouter.route('/')
 });
 
 // Route to log in
-userRouter.get('/login', passport.authenticate('local'), (req, res, next) => {
+userRouter.post('/login', passport.authenticate('local'), (req, res, next) => {
     const token = authenticate.getToken({_id: req.user._id});
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
