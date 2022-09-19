@@ -10,13 +10,55 @@ Any user NOT set up as an admin will be able to create events and edit their own
 
 # Testing
 
-In order to test endpoints, you will need to have [MongoDB](https://www.mongodb.com/try/download/community) installed globally, and you will need a program to directly test the endpoints such as [Insomnia](https://insomnia.rest/download), or [Postman](https://www.postman.com/downloads/). I used postman, so any screenshots or instructions here will assume you have the same, but Insomnia should work as long as you know how to perform the same steps.
+In order to test endpoints, you will need to have [MongoDB](https://www.mongodb.com/try/download/community) installed globally, and you will need a program to directly test the endpoints such as [Insomnia](https://insomnia.rest/download), or [Postman](https://www.postman.com/downloads/). I used postman, so any screenshots or instructions here will assume you have the same, but any program should work as long as you know how to perform the same steps (add bearer tokens, switch between HTTP methods, etc.)
 
-Create a root folder named "data"
+Create a folder named "data"
 
 From the parent folder of "data", run the following:
 
 <code>mongod --dbpath=data</code>
+
+Now we need two users to try out our endpoints--one who is an admin and one who is not.
+
+There are multiple ways to go about this. In this guide, I recommend creating users with Postman, then manually altering one to be an admin.
+
+Make sure the databse is currently connected to the "data" folder.
+
+In a separate terminal, run <code>npm start</code>
+
+Open postman, and send a POST request to https://localhost:3443/users with the following JSON body:
+
+```
+{
+    "email": testemail1@example.com",
+    "username": "notadmin",
+    "password": "password",
+    "firstName": "Joe",
+    "lastName": "Schmoe"
+}
+```
+
+**Before proceeding, it may be helpful to make a note of the _id provided.**
+
+Now to create a (soon to be) admin (noting that the email and username MUST both be different.):
+
+```
+{
+    "email": testemail2@example.com",
+    "username": "admin",
+    "password": "password",
+    "firstName": "Linus",
+    "lastName": "Torvalds"
+}
+```
+
+**Make a note of the _id provided, noting that this will be the admin.**
+
+Finally, since only admins can edit existing users using the API endpoints and we do not HAVE any admins yet, we have to manually alter one to be an admin.
+
+In a separate terminal, run <code>mongo</code>
+
+In the mongo CLI, enter <code></code>
 
 # Routes
 
@@ -40,13 +82,16 @@ POST: No functionality at this endpoint
 
 
 ## /events
-GET: Will retrieve all events from database
+GET: Will retrieve all events from database. (Ignore the highlighted event times for now. Just note that all events are returned.)
 
 ![all events retrieved using postman](./demo-screens/all-events-postman.jpg)
 
-If the body of the request has a start date, all events for that day are returned.
+
+If the body of the request has a startDate (in JSON format), all events for that day are returned.
 
 If the body of the request has a startDate and endDate, all events on or between those dates will be returned.
+
+![limited dates returned with postman](./demo-screens/specific-date-range-events-postman.jpg)
 
 DELETE: Clear all events from database
 Requires bearer token from an Admin to be present.
