@@ -73,8 +73,11 @@ When a user us successfully logged in, a token is returned.
 
 This token can be copied and entered as a Bearer Token in the header (or automatically entered using Postman's "bearer" authentication method,) causing future requests to let the server know which user is making the request.
 
+Here is an example of using the bearer token using Postman's bearer authentication
 ![postman bearer token](./demo-screens/postman-bearer-token.jpg)
 
+
+You can also add the header directly (this is all Postman was doing anyway). Make sure to add the header title "Authorization" with the value, "Bearer {token goes here}"
 ![header bearer token](./demo-screens/header-bearer-token.jpg)
 
 # <a name='testing'>Testing</a>
