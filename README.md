@@ -8,7 +8,66 @@ Any user set up as an "admin" can add, edit, or delete events, in addition to be
 
 Any user NOT set up as an admin will be able to create events and edit their own events, but nothing else.
 
-# Testing
+This guide to my project is split into three main parts:
+1. Routes
+2. Authentication
+3. [Testing](#testing)
+
+# Routes
+
+## /users
+GET: Will retrieve all users
+
+DELETE: Will clear all users
+
+PUT: Will not have any functionality at this endpoint
+
+POST: Create a new user
+
+## users/:userId
+
+By adding the _id for the user in question to the url (i.e., https://localhost:3443/users/bigLongUser_IdHere), CRUD operations can be performed. All of these require a bearer token from an Admin.
+
+GET: Retrieve information for specific user
+
+DELETE: Delete a specific user
+
+PUT: Will edit an existing user’s information
+
+## /events
+GET: Will retrieve all events from database. (Ignore the highlighted event times for now. Just note that all events are returned.)
+
+![all events retrieved using postman](./demo-screens/all-events-postman.jpg)
+
+
+If the body of the request has a startDate (in JSON format), all events for that day are returned.
+
+If the body of the request has a startDate and endDate, all events on or between those dates will be returned.
+
+![limited dates returned with postman](./demo-screens/specific-date-range-events-postman.jpg)
+
+DELETE: Clear all events from database
+Requires bearer token from an Admin to be present.
+
+POST: Create a new event
+Requires a bearer token from a valid user. Does not require that user to be an admin.
+
+The body must contain a name, description, and eventDate in JSON format. The eventDate must be a string that can be fed into <code>new Date(eventdate)</code> to create a valid javascript Date object.
+
+## /events/:eventId
+GET: Will retrieve information for the event with an _id of eventId
+
+DELETE: Will delete a specific event
+
+Requires a bearer token from either the creator of the event, or from an admin user.
+
+PUT: Will edit an existing event
+
+Requires a bearer token from either the creator of the event, or from an admin user.
+
+
+
+# <a name='testing'>Testing</a>
 
 In order to test endpoints, you will need to have [MongoDB](https://www.mongodb.com/try/download/community) installed globally, and you will need a program to directly test the endpoints such as [Insomnia](https://insomnia.rest/download), or [Postman](https://www.postman.com/downloads/). I used postman, so any screenshots or instructions here will assume you have the same, but any program should work as long as you know how to perform the same steps (add bearer tokens, switch between HTTP methods, etc.)
 
@@ -59,57 +118,3 @@ Finally, since only admins can edit existing users using the API endpoints and w
 In a separate terminal, run <code>mongo</code>
 
 In the mongo CLI, enter <code></code>
-
-# Routes
-
-## /users
-GET: Will retrieve all users
-
-DELETE: Will clear all users
-
-PUT: Will not have any functionality at this endpoint
-
-POST: Create a new user
-
-## users/userId
-GET: Retrieve information for a specific user
-
-DELETE: Delete a specific user
-
-PUT: Will edit an existing user’s information
-
-POST: No functionality at this endpoint
-
-
-## /events
-GET: Will retrieve all events from database. (Ignore the highlighted event times for now. Just note that all events are returned.)
-
-![all events retrieved using postman](./demo-screens/all-events-postman.jpg)
-
-
-If the body of the request has a startDate (in JSON format), all events for that day are returned.
-
-If the body of the request has a startDate and endDate, all events on or between those dates will be returned.
-
-![limited dates returned with postman](./demo-screens/specific-date-range-events-postman.jpg)
-
-DELETE: Clear all events from database
-Requires bearer token from an Admin to be present.
-
-POST: Create a new event
-Requires a bearer token from a valid user. Does not require that user to be an admin.
-
-The body must contain a name, description, and eventDate in JSON format. The eventDate must be a string that can be fed into <code>new Date(eventdate)</code> to create a valid javascript Date object.
-
-## /events/:eventId
-GET: Will retrieve information for the event with an _id of eventId
-
-DELETE: Will delete a specific event
-
-Requires a bearer token from either the creator of the event, or from an admin user.
-
-PUT: Will edit an existing event
-
-Requires a bearer token from either the creator of the event, or from an admin user.
-
-
