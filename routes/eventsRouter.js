@@ -62,14 +62,9 @@ eventRouter.route('/')
         res.setHeader('Content-Type', 'application/json');
         res.json(response)
     })
+    .catch(err => next(err))
 });
 
-
-// LEFT OFF HERE, WORK ON SPECIFIC EVENTS
-// Author should be able to edit their own event
-// Admins should be able to edit any event
-// Future feature: Add other allowed editors by username?
-// Route = /events/:eventId for targeting specific events. put/delete should require authentication
 eventRouter.route('/:eventId')
 .get((req, res, next) => {
     Event.findById(req.params.eventId)
