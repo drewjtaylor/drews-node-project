@@ -84,11 +84,21 @@ You can also add the header directly (this is all Postman was doing anyway). Mak
 
 In order to test endpoints, you will need to have [MongoDB](https://www.mongodb.com/try/download/community) installed globally, and you will need a program to directly test the endpoints such as [Insomnia](https://insomnia.rest/download), or [Postman](https://www.postman.com/downloads/). I used postman, so any screenshots or instructions here will assume you have the same, but any program should work as long as you know how to perform the same steps (add bearer tokens, switch between HTTP methods, etc.)
 
+You will also need openSSL installed in order to create a development example of a certified HTTPS connection.
+
 ## If you haven't already, run <code>npm install</code> to download dependencies.
 
 ## 1. Create a folder named "data"
 
-## 2. From the parent folder of "data", run the following:
+## 2. In the /bin folder, create a development SSL key
+
+Navigate a terminal to the /bin folder, and enter the following:
+
+<code>openssl req -nodes -new -x509 -keyout server.key -out server.cert</code>
+
+If you like you can answer the prompts, but since this is just for development don't stress about it. You can even just enter all answers blank.
+
+## 3. From the parent folder of "data", run the following:
 
 <code>mongod --dbpath=data</code>
 
@@ -96,13 +106,13 @@ Now we need two users to try out our endpoints--one who is an admin and one who 
 
 There are multiple ways to go about this. In this guide, I recommend creating users with Postman, then manually altering one to be an admin.
 
-## 3. Make sure the databse is currently connected to the "data" folder.
+## 4. Make sure the databse is currently connected to the "data" folder.
 
 In a separate terminal, from the root folder (where you see package.json), run:
 
  <code>npm start</code>
 
-## 4. Open postman, and send a POST request to https://localhost:3443/users with the following JSON body:
+## 5. Open postman, and send a POST request to https://localhost:3443/users with the following JSON body:
 
 ```
 {
