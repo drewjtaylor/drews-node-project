@@ -20,15 +20,27 @@ const connect = mongoose.connect(url, {
 });
 
 connect.then(
-    () => console.log('Connected correctly to the database server'), // If it works
-    err => console.log(err)) // If it doesn't work
+    () => console.log('Connected correctly to the database server'),
+    err => console.log(err)
+)
 
 
-// Anywhere after this line, "app" means "using express"
 const app = express();
 
 // Set up Morgan middleware logging in dev mode
 app.use(morgan('dev'));
+
+
+// Redirect non-secure requests to https
+app.all('*', (req, res, next) => {
+    if (req.secure) {
+        return next();
+    } else {
+        const secureUrl = `https://${req.hostname}:${app.get('secPort')}${req.url}`;
+        console.log(`Redirecting to: ${secureUrl}`);
+        res.redirect(308, secureUrl);
+    }
+});
 
 // Set up json middleware for dealing with JSON data
 app.use(express.json());
@@ -50,7 +62,6 @@ app.use((req, res) => {
     res.setHeader('Content-Type', 'text/html');
     res.end('<html><body><h1>This is an Express Server</h1></body></html>')
 });
-
 
 
 // Start the server listening, and logs that it started
