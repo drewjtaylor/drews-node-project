@@ -84,6 +84,7 @@ eventRouter.route('/:eventId')
     res.statusCode = 403;
     res.end(`POST operation not supported on /events/${req.params.eventId}.\nAdd an event by sending a POST request to /events`)
 })
+// Put request checks for a user to be signed in. Then if the creator is the user, or if the user is an admin, it updates
 .put(authenticate.verifyUser, (req, res, next) => {
     Event.findById(req.params.eventId)
     .then(event => {
@@ -101,9 +102,22 @@ eventRouter.route('/:eventId')
         };
     });
 })
-.delete((req, res, next) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/json')
+
+// Event creators, or any admin user may delete events.
+.delete(authenticate.verifyUser, (req, res, next) => {
+    Event.findById(req.params.eventId)
+    .then(event => {
+        if (event.creator.equals(req.user._id) || req.user.admin) {
+            console.log('req.params.eventId is: ', req.params.eventId)
+            // Event.deleteOne({ _id: req.params.eventId});
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'text/json')
+            res.json(event)
+        } else {
+            const err = new Error('You must be an admin or the creator of an event to delete it.');
+            return next(err)
+        }
+    })
 })
 
 module.exports = eventRouter;
