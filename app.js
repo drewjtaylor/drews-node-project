@@ -33,13 +33,12 @@ app.use(morgan('dev'));
 // Set up json middleware for dealing with JSON data
 app.use(express.json());
 
-// Set up 
+// Set up passprt
 app.use(passport.initialize());
 
 // Route references
 app.use('/events', eventRouter);
 app.use('/users', userRouter)
-
 
 // Essentially means, "static files are served at THIS FOLDER + /public".
 app.use(express.static(__dirname + '/public'));
@@ -58,3 +57,5 @@ app.use((req, res) => {
 app.listen(port, hostname, () => {
     console.log(`server runnning at http://${hostname}:${port}`)
 })
+
+module.exports = app;
