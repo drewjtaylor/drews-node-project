@@ -9,11 +9,11 @@ Any user set up as an "admin" can add, edit, or delete events, in addition to be
 Any user NOT set up as an admin will be able to create events and edit their own events, but nothing else.
 
 This guide to my project is split into three main parts:
-1. Routes
-2. Authentication
+1. [Routes](#routes)
+2. [Authentication](#authentication)
 3. [Testing](#testing)
 
-# Routes
+# <a name="routes">Routes</a>
 
 ## /users
 GET: Will retrieve all users
@@ -65,7 +65,17 @@ PUT: Will edit an existing event
 
 Requires a bearer token from either the creator of the event, or from an admin user.
 
+# <a name='authentication'>Authentication</a>
 
+When a user us successfully logged in, a token is returned.
+
+![user logged in](./demo-screens/token-after-log-in.jpg)
+
+This token can be copied and entered as a Bearer Token in the header (or automatically entered using Postman's "bearer" authentication method,) causing future requests to let the server know which user is making the request.
+
+![postman bearer token](./demo-screens/postman-bearer-token.jpg)
+
+![header bearer token](./demo-screens/header-bearer-token.jpg)
 
 # <a name='testing'>Testing</a>
 
