@@ -108,16 +108,19 @@ eventRouter.route('/:eventId')
     Event.findById(req.params.eventId)
     .then(event => {
         if (event.creator.equals(req.user._id) || req.user.admin) {
-            console.log('req.params.eventId is: ', req.params.eventId)
-            // Event.deleteOne({ _id: req.params.eventId});
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'text/json')
-            res.json(event)
+            Event.findByIdAndDelete(req.params.eventId)
+            .then(event => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'text/json')
+                res.json(event)
+            })
+            .catch(err => next(err))
         } else {
             const err = new Error('You must be an admin or the creator of an event to delete it.');
             return next(err)
         }
     })
+    .catch(err => next(err))
 })
 
 module.exports = eventRouter;
