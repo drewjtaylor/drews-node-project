@@ -13,6 +13,7 @@ This guide to my project is split into three main parts:
 2. [Authentication](#authentication)
 3. [Testing](#testing)
 4. [Roadmap](#roadmap)
+5. [How Was It Made](#howwasitmade)
 
 # <a name="routes">Routes</a>
 
@@ -185,3 +186,25 @@ It seems a little much to call future plans for such a small project a roadmap. 
 1. Add an "attendees" field to events, so that you could easily see who is attending what event. 
 2. Add an "allowedEditor" field to events. This would allow the event creator (or an admin) to designate a third party as someone who is also allowed to make changes to the event. 
 3. Find a good place to host the database, and get a working example up and running so anyone looking at this project can just start trying out endpoints. 
+
+# <a name="howwasitmade">How Was It Made</a>
+
+This project uses MongoDB for a database with Mongoose for object-relational mapping. In other words, Mongoose makes it easier to talk to the database.
+
+## Models
+
+Models were created for events and users with fields set up for appropriate types. Conveniently for a database to track events, javascript Date objects can be used as a type.
+
+## Authentication
+
+The authenticate.js file is a module set up to hold any functionality related to logging in, or checking if a user is logged in. Frankly, I'm still wrapping my head around some of the higher concepts here, and the core of my authenticate file is coming straight from the [Passport docs](https://www.passportjs.org/docs/). That being said, the purpose of the functions produced here do make sense, even if how they work under the hood is still a little vague.
+
+authenticate.getToken is used when logging in to set up a token. This token is sent back to the user in JSON in our case, and it can be 
+
+authenticate.verifyUser is from the docs. This function checks for a token in the request object, then if there is a correct token, updates the req.user object to match which ever user was logged in and created that token.
+
+authenticate.verifyAdmin checks the req.user object (created by verifyUser) and whether or not they are an admin. If they are, it passes the request and response on to the next middleware. Otherwise, it sends back an error letting the user know they have to be an admin for this operation.
+
+## Routes
+
+A different Route was set up for events and users, and it's on these routes where all of the logic is written. The purpose of each is described above, but as far as how they work, the server basically takes a request (commonly shortened to just "req"), a response to be sent back to the user ("res"), and a function called next used to pass on the request and response to the next middleware. Depending on the route, different things happen to the request and response, from adding a user object to request if verified as a user, or updating the response to give an appropriate error message.
