@@ -8,7 +8,6 @@ const config = require('./config.js');
 
 const User = require('./models/User');
 
-// What does this do?  Do we still need it after jwt?    Where does authenticate method come from?
 exports.local = passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());

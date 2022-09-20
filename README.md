@@ -17,13 +17,22 @@ This guide to my project is split into three main parts:
 # <a name="routes">Routes</a>
 
 ## /users
-GET: Will retrieve all users
+GET: Will retrieve all users (Requires admin to be signed in)
 
-DELETE: Will clear all users
+DELETE: Will clear all users (Requires admin to be signed in)
 
 PUT: Will not have any functionality at this endpoint
 
-POST: Create a new user
+POST: Used to regiser a new user by including a JSON body. The JSON body should include an email and username that hasn't been used before, a password, and an optional firstName and lastName field, such as the following:
+```
+{
+    "email": "testemail1@example.com",
+    "username": "notadmin",
+    "password": "password",
+    "firstName": "Joe",
+    "lastName": "Schmoe"
+}
+```
 
 ## users/:userId
 
@@ -33,15 +42,15 @@ GET: Retrieve information for specific user
 
 DELETE: Delete a specific user
 
-PUT: Will edit an existing user’s information
+PUT: Will edit an existing user’s information, updating any fields included in the JSON body of the request.
 
 ## /events
-GET: Will retrieve all events from database. (Ignore the highlighted event times for now. Just note that all events are returned.)
+GET: Will retrieve all events from database. (Ignore the highlighted event times for now. Just note that multiple events are returned.)
 
 ![all events retrieved using postman](./demo-screens/all-events-postman.jpg)
 
 
-If the body of the request has a startDate (in JSON format), all events for that day are returned.
+If the body of the request has a startDate (in JSON format) but no endDate, all events for that day are returned.
 
 If the body of the request has a startDate and endDate, all events on or between those dates will be returned.
 
@@ -58,11 +67,9 @@ The body must contain a name, description, and eventDate in JSON format. The eve
 ## /events/:eventId
 GET: Will retrieve information for the event with an _id of eventId
 
-DELETE: Will delete a specific event
+DELETE: Will delete a specific event. Requires a bearer token from either the creator of the event, or from an admin user.
 
-Requires a bearer token from either the creator of the event, or from an admin user.
-
-PUT: Will edit an existing event
+PUT: Will edit an existing event. Also requires a bearer token from the creator or an admin.
 
 Requires a bearer token from either the creator of the event, or from an admin user.
 
