@@ -98,15 +98,22 @@ Navigate a terminal to the /bin folder, and enter the following:
 
 If you like you can answer the prompts, but since this is just for development don't stress about it. You can even just enter all answers blank.
 
-## 3. From the parent folder of "data", run the following:
+## 3. Start the database
+
+From the parent folder of "data", run the following:
 
 <code>mongod --dbpath=data</code>
+
+Leave this terminal running. 
+
+## 4. Create users
 
 Now we need two users to try out our endpoints--one who is an admin and one who is not.
 
 There are multiple ways to go about this. In this guide, I recommend creating users with Postman, then manually altering one to be an admin.
 
-## 4. Make sure the databse is currently connected to the "data" folder.
+
+Make sure the databse is currently connected to the "data" folder.
 
 In a separate terminal, from the root folder (where you see package.json), run:
 
