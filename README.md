@@ -12,6 +12,7 @@ This guide to my project is split into three main parts:
 1. [Routes](#routes)
 2. [Authentication](#authentication)
 3. [Testing](#testing)
+4. [Roadmap](#roadmap)
 
 # <a name="routes">Routes</a>
 
@@ -123,7 +124,7 @@ In a separate terminal, from the root folder (where you see package.json), run:
 
 ```
 {
-    "email": testemail1@example.com",
+    "email": "testemail1@example.com",
     "username": "notadmin",
     "password": "password",
     "firstName": "Joe",
@@ -131,13 +132,11 @@ In a separate terminal, from the root folder (where you see package.json), run:
 }
 ```
 
-**Before proceeding, make a note of the _id provided and note that it is not an admin.**
-
 Now we need to create a (soon to be) admin (noting that the email and username MUST both be different.) Send another POST request with the following:
 
 ```
 {
-    "email": testemail2@example.com",
+    "email": "testemail2@example.com",
     "username": "admin",
     "password": "password",
     "firstName": "Linus",
@@ -145,10 +144,37 @@ Now we need to create a (soon to be) admin (noting that the email and username M
 }
 ```
 
-**Make a note of the _id provided, noting that this will be the admin.**
 
 Finally, since only admins can edit existing users using the API endpoints and we do not HAVE any admins yet, we have to manually alter one to be an admin.
 
-In a separate terminal, run <code>mongo</code>
+In a separate terminal, run <code>mongo</code> to enter the Mongo CLI.
 
-In the mongo CLI, enter <code></code>
+In the mongo CLI, enter <code>use formationdb</code> which is the name of this database.
+
+Then enter the following line of code in the CLI to find the username "admin" and set it's "admin" property to true:
+
+<code>db.users.findOneAndUpdate({ username: "admin"}, { $set: {admin: "true"}})</code>
+
+The Mongo CLI can be closed after this.
+
+The last thing to do is to log that user in. In Postman, submit a POST request to https://localhost:3443/users/login with the following JSON body:
+```
+"username": "admin",
+"password": "password"
+```
+
+Copy the token that is returned. 
+
+![user logged in](./demo-screens/token-after-log-in.jpg)
+
+Then take that token and use it either automatically in Postman using the "Bearer Token" authorization, or by setting a header of "Authorization" with the value of "Bearer {your token goes here}"
+
+Now any events created will automatically be assigned a "creator" with this user's _id automatically. Since it's an admin account, all API endpoints should work.
+
+# <a name='roadmap'>Roadmap</a>
+
+It seems a little much to call future plans for such a small project a roadmap. Nevertheless, there is still some functionality I would like to add to this project before moving on.
+
+1. Add an "attendees" field to events, so that you could easily see who is attending what event. 
+2. Add an "allowedEditor" field to events. This would allow the event creator (or an admin) to designate a third party as someone who is also allowed to make changes to the event. 
+3. Find a good place to host the database, and get a working example up and running so anyone looking at this project can just start trying out endpoints. 
