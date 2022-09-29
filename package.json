@@ -3,8 +3,11 @@
     "version": "1.0.0",
     "description": "A server for handling requests to MongoDB for events/users",
     "main": "./bin/www",
+    "jest": {
+        "preset": "@shelf/jest-mongodb"
+    },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "jest",
         "start": "nodemon ./bin/www"
     },
     "dependencies": {
@@ -22,6 +25,7 @@
         "session-file-store": "^1.5.0"
     },
     "devDependencies": {
+        "@shelf/jest-mongodb": "^4.1.0",
         "debug": "~2.6.9",
         "jest": "^29.1.1",
         "morgan": "~1.9.1"
