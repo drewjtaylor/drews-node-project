@@ -8,7 +8,7 @@ Any user set up as an "admin" can add, edit, or delete events, in addition to be
 
 Any user NOT set up as an admin will be able to create events and edit their own events, but nothing else.
 
-This guide to my project is split into three main parts:
+This guide to my project is split into these main parts:
 1. [Routes](#routes)
 2. [Authentication](#authentication)
 3. [Testing](#testing)
