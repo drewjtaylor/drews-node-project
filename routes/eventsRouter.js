@@ -82,12 +82,15 @@ eventRouter.route('/:eventId')
     .then(event => {
         if (event) {
             if (event.attendees.includes(req.user._id)) {
-                res.write('You are already listed as attending this event.')
+                res.end('You are already listed as attending this event.')
             } else {
                 event.attendees.push(req.user._id);
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'text/json');
-                res.json(event)
+                event.save()
+                .then(item => {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'text/json');
+                    res.json(item)
+                })
             }
         }
     })
