@@ -82,7 +82,7 @@ eventRouter.route('/:eventId')
     .then(event => {
         if (event) {
             if (event.attendees.includes(req.user._id)) {
-                res.end('You are already listed as attending this event.')
+                res.json({message: 'You are already attending this event.', ...event._doc})
             } else {
                 event.attendees.push(req.user._id);
                 event.save()
