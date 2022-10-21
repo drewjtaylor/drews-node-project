@@ -65,24 +65,14 @@ eventRouter.route('/')
     .catch(err => next(err))
 });
 
-// Event router operations for SPECIFIC events identified by ID
-eventRouter.route('/:eventId')
-.get((req, res, next) => {
-    Event.findById(req.params.eventId)
-    .then(event => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/json');
-        res.json(event)
-    })
-    .catch(err => next(err))
-})
+eventRouter.route('/:eventId/register')
+// Registers the logged in user as an attendee for the event
 .post(authenticate.verifyUser, (req, res, next) => {
-    // The POST method for a SPECIFIC event is used to add a USER as an attendee
     Event.findById(req.params.eventId)
     .then(event => {
         if (event) {
             if (event.attendees.includes(req.user._id)) {
-                res.json({message: 'You are already attending this event.', ...event._doc})
+                res.json({message: 'You are already attending this event.'})
             } else {
                 event.attendees.push(req.user._id);
                 event.save()
@@ -95,15 +85,45 @@ eventRouter.route('/:eventId')
         }
     })
     .catch(err => next(err))
-    
-    // Event.updateOne({_id: req.params.eventId}, )
-
-
-    
-    // Original post operation below
-    // res.statusCode = 403;
-    // res.end(`POST operation not supported on /events/${req.params.eventId}.\nAdd an event by sending a POST request to /events`)
 })
+.get()
+.put()
+.delete(authenticate.verifyUser, (req, res, next) => {
+    Event.findById(req.params.eventId)
+    .then(event => {
+        if (event.attendees.includes(req.user._id)) {
+            event.attendees.pull({_id: req.user.id});
+            event.save()
+            .then(event => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'text/json');
+                res.json(event)
+            })
+        } else {
+            res.end('You were already not listed as an attendee')
+        }
+    })
+
+})
+
+
+
+// Event router operations for SPECIFIC events identified by ID
+eventRouter.route('/:eventId')
+.get((req, res, next) => {
+    Event.findById(req.params.eventId)
+    .then(event => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/json');
+        res.json(event)
+    })
+    .catch(err => next(err))
+})
+.post(authenticate.verifyUser, (req, res, next) => {
+    res.statusCode = 403;
+    res.end(`POST operation not supported on /events/${req.params.eventId}.\nAdd an event by sending a POST request to /events`)
+})
+
 // Put request checks for a user to be signed in. Then if the creator is the user, or if the user is an admin, it updates
 .put(authenticate.verifyUser, (req, res, next) => {
     Event.findById(req.params.eventId)
