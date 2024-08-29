@@ -8,7 +8,7 @@ const userRouter = require('./routes/usersRouter');
 const config = require('./config');
 const dotenv = require('dotenv').config()
 
-const hostname = 'localhost';
+const hostname = '127.0.0.1';
 const port = 8080;
 
 const externalDbConnection = process.env.MONGOURI;
