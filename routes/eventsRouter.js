@@ -7,6 +7,7 @@ const User = require('../models/User');
 
 eventRouter.route('/')
 .get((req, res, next) => {
+    console.log("Get Events triggered");
     if (req.body.startDate) { // Requires a startDate and optional endDate formatted this way: '2022-10-05'
         const startDate = new Date(req.body.startDate);
         
