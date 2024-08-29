@@ -95,7 +95,8 @@ eventRouter.route('/:eventId')
             const err = new Error('You must be an admin or the creator of the event to make changes');
             return next(err)
         };
-    });
+    })
+    .catch(err => next(err));
 })
 
 // Event creators, or any admin user may delete events.
@@ -114,6 +115,39 @@ eventRouter.route('/:eventId')
             const err = new Error('You must be an admin or the creator of an event to delete it.');
             return next(err)
         }
+    })
+    .catch(err => next(err))
+})
+
+// Logged in user can register as an attendee of an event or remove attendance
+eventRouter.route('/register/:eventId')
+.get((req, res, next) => {
+    res.statusCode = 403;
+    res.end('GET operation not supported on /events/register.')
+})
+.post(authenticate.verifyUser, (req, res, next) => {
+    Event.findByIdAndUpdate(
+        req.params.eventId,
+        {$addToSet: { attendees: req.user._id}},
+        {new: true, useFindAndModify: false}
+    )
+    .then(event => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/json');
+        res.json(event)
+    })
+    .catch(err => next(err))
+})
+.delete(authenticate.verifyUser, (req, res, next) => {
+    Event.findByIdAndUpdate(
+        req.params.eventId,
+        {$pull: {attendees: req.user._id}},
+        {new: true, useFindAndModify: false}
+    )
+    .then(event => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/json');
+        res.json( {message: 'You have been removed from the event', event})
     })
     .catch(err => next(err))
 })
