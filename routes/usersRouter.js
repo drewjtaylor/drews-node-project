@@ -47,7 +47,13 @@ userRouter.route('/')
                     passport.authenticate('local')(req, res, () => {
                         res.statusCode = 201;
                         res.setHeader('Content-Type', 'application/json');
-                        res.json({success: true, status: 'Registration successful'});
+                        res.json({
+                            success: true, 
+                            status: 'Registration successful',
+                            email: req.body.email,
+                            username: req.body.username,
+                            password: req.body.password
+                        });
                     })
                 })
             }
