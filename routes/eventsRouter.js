@@ -8,7 +8,8 @@ const User = require('../models/User');
 eventRouter.route('/')
 .get((req, res, next) => {
     console.log("Get Events triggered");
-    if (true) { // Requires a startDate and optional endDate formatted this way: '2022-10-05'
+    if (req.body.startDate) { // Requires a startDate and optional endDate formatted this way: '2022-10-05'
+        console.log('There is a req.body.startDate')
         // const startDate = new Date(req.body.startDate);
         const startDate = '2000-01-01';
         
@@ -22,6 +23,7 @@ eventRouter.route('/')
             $gte: startDate, 
             $lte: endDate
         }}).sort({eventDate: 1})
+        .populate('creator')
         .then(events => {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
@@ -29,6 +31,7 @@ eventRouter.route('/')
         })
         .catch(err => next(err))
     } else {
+        console.log(req.body)
         Event.find()
         .sort({eventDate: 1})
         .populate('creator')
