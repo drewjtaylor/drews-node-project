@@ -118,4 +118,15 @@ eventRouter.route('/:eventId')
     .catch(err => next(err))
 })
 
+// Gracefully handle errors
+eventRouter.use((err, req, res, next) => {
+    res.statusCode = err.statusCode || 500;
+    res.setHeader('Content-Type', 'application/json');
+    res.json({
+        success: false,
+        status: res.statusCode,
+        message: err.message
+    })
+})
+
 module.exports = eventRouter;

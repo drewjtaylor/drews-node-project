@@ -127,8 +127,20 @@ userRouter.route('/:userId')
     .then(response => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(response);
+        res.next(response);
     })
+    .catch(err => next(err))
 });
+
+// Gracefully handle errors
+userRouter.use((err, req, res, next) => {
+    res.statusCode = err.statusCode || 500;
+    res.setHeader('Content-Type', 'application/json');
+    res.json({
+        success: false,
+        status: res.statusCode,
+        message: err.message
+    })
+})
 
 module.exports = userRouter;
