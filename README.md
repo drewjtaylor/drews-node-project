@@ -1,5 +1,8 @@
 # This is the node/express server created as a side project during my Nucamp class.
 
+If you have access to Postman, you can test out this API project here: 
+[<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://app.getpostman.com/run-collection/22954547-25bfee63-e883-4bcb-a3e6-851f62719919?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D22954547-25bfee63-e883-4bcb-a3e6-851f62719919%26entityType%3Dcollection%26workspaceId%3Ddc2e3761-fe20-4fc6-8e76-fa61671c14b3)
+
 ## CI/CD update!
 
 Originally this was a server run locally, requiring a MongoDB server t obe set up locally, and was generally not easy to demonstrate.
