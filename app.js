@@ -6,12 +6,15 @@ const passport = require('passport');
 const eventRouter = require('./routes/eventsRouter');
 const userRouter = require('./routes/usersRouter');
 const config = require('./config');
+const dotenv = require('dotenv').config()
 
 const hostname = 'localhost';
-const port = 3000;
+const port = 8080;
+
+const externalDbConnection = process.env.MONGOURI;
 
 // Configure and connect to Mongoose
-const url = config.mongoUrl;
+const url = externalDbConnection || config.mongoUrl;
 const connect = mongoose.connect(url, {
     useCreateIndex: true,
     useFindAndModify: false,
@@ -19,8 +22,9 @@ const connect = mongoose.connect(url, {
     useUnifiedTopology: true
 });
 
+
 connect.then(
-    () => console.log('Connected correctly to the database server'),
+    () => console.log(`Connected correctly to the ${externalDbConnection ? 'MongoDB Atlas ' : 'local MongoDB '} server`),
     err => console.log(err)
 )
 
@@ -32,15 +36,15 @@ app.use(morgan('dev'));
 
 
 // Redirect non-secure requests to https
-app.all('*', (req, res, next) => {
-    if (req.secure) {
-        return next();
-    } else {
-        const secureUrl = `https://${req.hostname}:${app.get('secPort')}${req.url}`;
-        console.log(`Redirecting to: ${secureUrl}`);
-        res.redirect(308, secureUrl);
-    }
-});
+// app.all('*', (req, res, next) => {
+//     if (req.secure) {
+//         return next();
+//     } else {
+//         const secureUrl = `https://${req.hostname}:${app.get('secPort')}${req.url}`;
+//         console.log(`Redirecting to: ${secureUrl}`);
+//         res.redirect(308, secureUrl);
+//     }
+// });
 
 // Set up json middleware for dealing with JSON data
 app.use(express.json());
