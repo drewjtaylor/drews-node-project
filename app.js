@@ -13,11 +13,10 @@ const hostname = '127.0.0.1'; // Was 'localhost', but needs specific IP for depl
 const port = 8080;
 
 const externalDbConnection = process.env.MONGOURI;
-console.log(`MONGOURI is ${process.env.MONGOURI}`)
 
 // Configure and connect to Mongoose
+// If you are using a local mongodb database, you will need to update the config.js file
 const url = externalDbConnection || config.mongoUrl;
-console.log(`Using url for Mongodb: ${url}`);
 const connect = mongoose.connect(url, {
     useCreateIndex: true,
     useFindAndModify: false,
