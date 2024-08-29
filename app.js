@@ -8,13 +8,16 @@ const userRouter = require('./routes/usersRouter');
 const config = require('./config');
 const dotenv = require('dotenv').config()
 
-const hostname = '127.0.0.1';
+
+const hostname = '127.0.0.1'; // Was 'localhost', but needs specific IP for deployment on GCloud
 const port = 8080;
 
 const externalDbConnection = process.env.MONGOURI;
+console.log(`MONGOURI is ${process.env.MONGOURI}`)
 
 // Configure and connect to Mongoose
 const url = externalDbConnection || config.mongoUrl;
+console.log(`Using url for Mongodb: ${url}`);
 const connect = mongoose.connect(url, {
     useCreateIndex: true,
     useFindAndModify: false,
