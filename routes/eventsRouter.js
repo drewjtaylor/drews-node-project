@@ -8,10 +8,10 @@ const User = require('../models/User');
 eventRouter.route('/')
 .get((req, res, next) => {
     if (req.body.startDate) { // Requires a startDate and optional endDate formatted this way: '2022-10-05'
-        const startDate = `${new Date(req.body.startDate)}`;
+        const startDate = new Date(req.body.startDate);
         
         // If only a start date is passed, all events for a single day are returned
-        const endDate = req.body.endDate ? `${new Date(req.body.endDate)}` : `${new Date(`${req.body.startDate}T23:59`)}`;
+        const endDate = req.body.endDate ? new Date(req.body.endDate) : new Date(`${req.body.startDate}T23:59`);
 
         Event.find({eventDate: { $gte: startDate, $lte: endDate}}).sort({eventDate: 1})
         .then(events => {
