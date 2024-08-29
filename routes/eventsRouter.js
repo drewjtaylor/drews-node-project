@@ -13,8 +13,7 @@ eventRouter.route('/')
         // If only a start date is passed, all events for a single day are returned
         const endDate = req.body.endDate ? new Date(req.body.endDate) : new Date(`${req.body.startDate}T23:59`);
 
-        Event.find({eventDate: { $gte: startDate, $lte: endDate}})
-        .sort({eventDate: 1})
+        Event.find({eventDate: { $gte: startDate, $lte: endDate}}).sort({eventDate: 1})
         .then(events => {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
