@@ -7,18 +7,15 @@ const User = require('../models/User');
 
 eventRouter.route('/')
 .get((req, res, next) => {
-    console.log("Get Events triggered");
-    // if (req.body.beginDate) { // Requires a beginDate and optional endDate formatted this way: '2022-10-05'
+    if (req.body.beginDate) { // Requires a beginDate and optional endDate formatted this way: '2022-10-05'
         console.log('There is a req.body.beginDate')
         const beginDate = new Date(req.body.beginDate);
-        // const beginDate = '2000-01-01';
         
         // If only a start date is passed, all events for a single day are returned
         const endDate = req.body.endDate ? 
         new Date(req.body.endDate) : 
         new Date(`${req.body.beginDate}T23:59`);
-        // const endDate = '3000-12-31';
-        
+
         Event.find({eventDate: { 
             $gte: beginDate, 
             $lte: endDate
@@ -30,18 +27,18 @@ eventRouter.route('/')
             res.json(events)
         })
         .catch(err => next(err))
-    // } else {
-    //     console.log(req.body)
-    //     Event.find()
-    //     .sort({eventDate: 1})
-    //     .populate('creator')
-    //     .then(events => {
-    //         res.statusCode = 200;
-    //         res.setHeader('Content-Type', 'application/json');
-    //         res.json(events)
-    //     })
-    //     .catch(err => next(err))
-    // }
+    } else {
+        console.log(req.body)
+        Event.find()
+        .sort({eventDate: 1})
+        .populate('creator')
+        .then(events => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(events)
+        })
+        .catch(err => next(err))
+    }
 })
 .post(
     authenticate.verifyUser, 
