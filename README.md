@@ -5,7 +5,7 @@ If you have access to Postman, you can test out this API project here:
 
 ## CI/CD update!
 
-Originally this was a server run locally, requiring a MongoDB server t obe set up locally, and was generally not easy to demonstrate.
+Originally this was a server run locally, requiring a local MongoDB server, and it was difficult to demonstrate.
 
 No longer!
 
